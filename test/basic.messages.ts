@@ -1,12 +1,16 @@
 // Basic referral: sent email invite to a friend
 
+// if a non-user, accepts a referral, one becomes a user
+// if the non-user doesn't accept any invitation - the first one that is
+// accepted, wins. So the other invites will change its status to lost
+
 export default {
   print: false,
   pattern: 'biz:refer',
   allow: { missing: true },
 
   calls: [
-    // User with id=u01 sends referal to friend alice@example.com
+    // User with id=u01 sends referral to friend alice@example.com
     // Creating:
     //   - refer/entry referral record
     //   - refer/occur event record
@@ -132,6 +136,60 @@ export default {
         kind: 'accept',
         count: 1 // alice@example.com accepted
       }
+    },
+
+    // Another user send a referral to alice@example.com
+
+    // User with id=u02 sends referral to friend alice@example.com
+    // Creating:
+    //   - another refer/entry referral record
+    //   - another refer/occur event record
+    //   - sent email to alice@example.com (mock/email record)
+    {
+      print: true,
+      name: 'create-alice2',
+      pattern: 'create:entry', // call { biz:refer, create:entry, ...params }
+      params: {
+        user_id: 'u02',
+        kind: 'standard', // avoid using 'type', 'kind' has fewer conflicts
+        email: 'alice@example.com'
+      },
+      out: {
+        ok: true,
+        entry: {
+          user_id: 'u02', // _id suffix for foreign keys
+          kind: 'standard',
+          email: 'alice@example.com'
+        },
+        occur: [
+          {
+            user_id: 'u02',
+            entry_kind: 'standard',
+            kind: 'create',
+            email: 'alice@example.com'
+          }
+        ]
+      }
+    },
+
+    // Validate that both refer/entry exists, and they are correct
+    {
+      print: true,
+      pattern: 'biz:null,role:entity,base:refer,name:entry,cmd:list',
+      out: [
+        {
+          id: '`create-alice:out.entry.id`',
+          user_id: 'u01',
+          kind: 'standard',
+          email: 'alice@example.com'
+        },
+        {
+          id: '`create-alice2:out.entry.id`',
+          user_id: 'u02',
+          kind: 'standard',
+          email: 'alice@example.com'
+        }
+      ]
     }
   ]
 }
