@@ -18,7 +18,7 @@ export default {
     // Email sending to be implemented with @seneca/mail later
     // NOTE: implementation is just hard-coded!
     {
-      print: true,
+      print: false,
       name: 'create-alice',
       pattern: 'create:entry', // call { biz:refer, create:entry, ...params }
       params: {
@@ -45,11 +45,11 @@ export default {
     },
 
     // Print entire database
-    // { print: true, pattern: 'biz:null,role:mem-store,cmd:dump' },
+    // { print: false, pattern: 'biz:null,role:mem-store,cmd:dump' },
 
     // Validate the refer/entry exists and is correct
     {
-      print: true,
+      print: false,
       pattern: 'biz:null,role:entity,base:refer,name:entry,cmd:list',
       out: [
         {
@@ -89,55 +89,6 @@ export default {
       ]
     },
 
-    // Accept the referral
-    {
-      print: true,
-      name: 'accept-alice',
-      pattern: 'accept:entry',
-      params: {
-        key: '`create-alice:out.entry.key`',
-        user_id: 'u01'
-      },
-      out: {
-        ok: true,
-        entry: {
-          user_id: 'u01',
-          kind: 'standard',
-          email: 'alice@example.com'
-        },
-        occur: [
-          {
-            user_id: 'u01',
-            kind: 'accept'
-          }
-        ]
-      }
-    },
-    // Validate new refer/occur record
-    {
-      print: true,
-      pattern: 'biz:null,role:entity,base:refer,name:occur,cmd:load',
-      params: { q: { kind: 'accept' } },
-      out: {
-        entry_id: '`create-alice:out.entry.id`',
-        user_id: 'u01',
-        kind: 'accept'
-      }
-    },
-
-    // Validate new refer/reward updated
-    {
-      print: true,
-      pattern: 'biz:null,role:entity,base:refer,name:reward,cmd:load',
-      params: { q: { entry_id: '`create-alice:out.entry.id`' } },
-      out: {
-        entry_id: '`accept-alice:out.entry.id`',
-        entry_kind: 'standard',
-        kind: 'accept',
-        count: 1 // alice@example.com accepted
-      }
-    },
-
     // Another user send a referral to alice@example.com
 
     // User with id=u02 sends referral to friend alice@example.com
@@ -174,7 +125,7 @@ export default {
 
     // Validate that both refer/entry exists, and they are correct
     {
-      print: true,
+      print: false,
       pattern: 'biz:null,role:entity,base:refer,name:entry,cmd:list',
       out: [
         {
@@ -190,6 +141,79 @@ export default {
           email: 'alice@example.com'
         }
       ]
+    },
+
+    // Validate that both refer/occur exists, and they are correct
+    {
+      print: true,
+      pattern: 'biz:null,role:entity,base:refer,name:occur,cmd:list',
+      out: [
+        {
+          id: '`create-alice:out.occur[0].id`',
+          user_id: '`create-alice:out.occur[0].user_id`',
+          entry_id: '`create-alice:out.entry.id`',
+          entry_kind: 'standard',
+          kind: 'create',
+          email: 'alice@example.com'
+        },
+        {
+          id: '`create-alice2:out.occur[0].id`',
+          user_id: '`create-alice2:out.occur[0].user_id`',
+          entry_id: '`create-alice2:out.entry.id`',
+          entry_kind: 'standard',
+          kind: 'create',
+          email: 'alice@example.com'
+        }
+      ]
+    },
+
+    // Accept the referral
+    {
+      print: false,
+      name: 'accept-alice',
+      pattern: 'accept:entry',
+      params: {
+        key: '`create-alice:out.entry.key`',
+        user_id: 'u01'
+      },
+      out: {
+        ok: true,
+        entry: {
+          user_id: 'u01',
+          kind: 'standard',
+          email: 'alice@example.com'
+        },
+        occur: [
+          {
+            user_id: 'u01',
+            kind: 'accept'
+          }
+        ]
+      }
+    },
+    // Validate new refer/occur record
+    {
+      print: false,
+      pattern: 'biz:null,role:entity,base:refer,name:occur,cmd:load',
+      params: { q: { kind: 'accept' } },
+      out: {
+        entry_id: '`create-alice:out.entry.id`',
+        user_id: 'u01',
+        kind: 'accept'
+      }
+    },
+
+    // Validate new refer/reward updated
+    {
+      print: false,
+      pattern: 'biz:null,role:entity,base:refer,name:reward,cmd:load',
+      params: { q: { entry_id: '`create-alice:out.entry.id`' } },
+      out: {
+        entry_id: '`accept-alice:out.entry.id`',
+        entry_kind: 'standard',
+        kind: 'accept',
+        count: 1 // alice@example.com accepted
+      }
     }
   ]
 }
