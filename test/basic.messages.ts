@@ -97,7 +97,7 @@ export default {
     //   - another refer/occur event record
     //   - sent email to alice@example.com (mock/email record)
     {
-      print: true,
+      print: false,
       name: 'create-alice2',
       pattern: 'create:entry', // call { biz:refer, create:entry, ...params }
       params: {
@@ -145,7 +145,7 @@ export default {
 
     // Validate that both refer/occur exists, and they are correct
     {
-      print: true,
+      print: false,
       pattern: 'biz:null,role:entity,base:refer,name:occur,cmd:list',
       out: [
         {
@@ -174,7 +174,9 @@ export default {
       pattern: 'accept:entry',
       params: {
         key: '`create-alice:out.entry.key`',
-        user_id: 'u01'
+        user_id: 'u01',
+        kind: 'standard', // avoid using 'type', 'kind' has fewer conflicts
+        email: 'alice@example.com'
       },
       out: {
         ok: true,
@@ -214,6 +216,36 @@ export default {
         kind: 'accept',
         count: 1 // alice@example.com accepted
       }
+    },
+
+    { print: false, pattern: 'biz:null,role:mem-store,cmd:dump' },
+
+    // Validate that the remaining invite changes is status to lost
+
+    {
+      print: true,
+      pattern: 'biz:null,role:entity,base:refer,name:occur,cmd:list',
+      params: { q: { email: 'alice@example.com' } },
+      out: [
+        {
+          user_id: 'u01',
+          entry_kind: 'standard',
+          kind: 'create',
+          email: 'alice@example.com'
+        },
+        {
+          user_id: 'u02',
+          entry_kind: 'standard',
+          kind: 'create',
+          email: 'alice@example.com'
+        },
+        {
+          user_id: 'u01',
+          entry_kind: 'standard',
+          kind: 'accept',
+          email: 'alice@example.com'
+        }
+      ]
     }
   ]
 }
