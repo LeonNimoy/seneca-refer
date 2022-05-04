@@ -40,10 +40,9 @@ function refer(this: any, options: any) {
   async function actAcceptEntry(this: any, msg: any) {
     const seneca = this
 
-    const entryList = await seneca
+    const entry = await seneca
       .entity('refer/entry')
-      .list$({ user_id: msg.user_id })
-    const entry = entryList[0]
+      .load$({ user_id: msg.user_id, kind: msg.kind, email: msg.email })
 
     const occur = await seneca.entity('refer/occur').save$({
       user_id: msg.user_id,
@@ -52,7 +51,7 @@ function refer(this: any, options: any) {
       entry_id: entry.id,
       kind: 'accept'
     })
-
+    await updateRemainingInvites(seneca, entry)
     const reward = await getEntryReward(seneca, entry)
 
     return {
@@ -104,6 +103,19 @@ function refer(this: any, options: any) {
     const seneca = this
     await seneca.post('biz:refer,load:rules')
   }
+}
+
+async function updateRemainingInvites(seneca: any, entry: any): Promise<void> {
+  const lostInvitesList = await seneca.entity('refer/occur').list$({
+    entry_id: entry.id
+  })
+
+  console.log(lostInvitesList)
+  //   lostInvitesList.forEach(invite => {
+  // invite.
+  //   })
+
+  // await seneca.entity('refer/occur').save$(lostInvitesList)
 }
 
 async function getEntryReward(seneca: any, entry: any): Promise<object> {
