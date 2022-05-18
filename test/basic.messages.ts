@@ -99,24 +99,24 @@ export default {
       params: {
         user_id: 'u02',
         kind: 'standard', // avoid using 'type', 'kind' has fewer conflicts
-        email: 'alice@example.com'
+        email: 'alice@example.com',
       },
       out: {
         ok: true,
         entry: {
           user_id: 'u02', // _id suffix for foreign keys
           kind: 'standard',
-          email: 'alice@example.com'
+          email: 'alice@example.com',
         },
         occur: [
           {
             user_id: 'u02',
             entry_kind: 'standard',
             kind: 'create',
-            email: 'alice@example.com'
-          }
-        ]
-      }
+            email: 'alice@example.com',
+          },
+        ],
+      },
     },
 
     // Validate that both refer/entry exists, and they are correct
@@ -128,15 +128,15 @@ export default {
           id: '`create-alice:out.entry.id`',
           user_id: 'u01',
           kind: 'standard',
-          email: 'alice@example.com'
+          email: 'alice@example.com',
         },
         {
           id: '`create-alice2:out.entry.id`',
           user_id: 'u02',
           kind: 'standard',
-          email: 'alice@example.com'
-        }
-      ]
+          email: 'alice@example.com',
+        },
+      ],
     },
 
     // Validate that both refer/occur exists, and they are correct
@@ -150,7 +150,7 @@ export default {
           entry_id: '`create-alice:out.entry.id`',
           entry_kind: 'standard',
           kind: 'create',
-          email: 'alice@example.com'
+          email: 'alice@example.com',
         },
         {
           id: '`create-alice2:out.occur[0].id`',
@@ -158,9 +158,9 @@ export default {
           entry_id: '`create-alice2:out.entry.id`',
           entry_kind: 'standard',
           kind: 'create',
-          email: 'alice@example.com'
-        }
-      ]
+          email: 'alice@example.com',
+        },
+      ],
     },
 
     // Accept the referral
@@ -247,22 +247,22 @@ export default {
           user_id: 'u01',
           entry_kind: 'standard',
           kind: 'create',
-          email: 'alice@example.com'
+          email: 'alice@example.com',
         },
         {
           user_id: 'u02',
           entry_kind: 'standard',
           kind: 'create',
-          email: 'alice@example.com'
+          email: 'alice@example.com',
         },
         {
           user_id: 'u01',
           entry_kind: 'standard',
           kind: 'accept',
-          email: 'alice@example.com'
-        }
-      ]
-    }
+          email: 'alice@example.com',
+        },
+      ],
+    },
   ],
 }
 
