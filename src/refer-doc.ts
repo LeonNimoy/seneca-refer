@@ -2,8 +2,8 @@
 
 const docs = {
   actCreateEntry: {
-    desc: 'Create referral entry.'
-  }
+    desc: 'Create referral entry.',
+  },
 }
 
 export default docs

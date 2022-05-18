@@ -1,9 +1,5 @@
 // Basic referral: sent email invite to a friend
 
-// if a non-user, accepts a referral, one becomes a user
-// if the non-user doesn't accept any invitation - the first one that is
-// accepted, wins. So the other invites will change its status to lost
-
 export default {
   print: false,
   pattern: 'biz:refer',
@@ -18,47 +14,47 @@ export default {
     // Email sending to be implemented with @seneca/mail later
     // NOTE: implementation is just hard-coded!
     {
-      print: false,
+      print: true,
       name: 'create-alice',
       pattern: 'create:entry', // call { biz:refer, create:entry, ...params }
       params: {
         user_id: 'u01',
         kind: 'standard', // avoid using 'type', 'kind' has fewer conflicts
-        email: 'alice@example.com'
+        email: 'alice@example.com',
       },
       out: {
         ok: true,
         entry: {
           user_id: 'u01', // _id suffix for foreign keys
           kind: 'standard',
-          email: 'alice@example.com'
+          email: 'alice@example.com',
         },
         occur: [
           {
             user_id: 'u01',
             entry_kind: 'standard',
             kind: 'create',
-            email: 'alice@example.com'
-          }
-        ]
-      }
+            email: 'alice@example.com',
+          },
+        ],
+      },
     },
 
     // Print entire database
-    // { print: false, pattern: 'biz:null,role:mem-store,cmd:dump' },
+    // { print: true, pattern: 'biz:null,role:mem-store,cmd:dump' },
 
     // Validate the refer/entry exists and is correct
     {
-      print: false,
+      print: true,
       pattern: 'biz:null,role:entity,base:refer,name:entry,cmd:list',
       out: [
         {
           id: '`create-alice:out.entry.id`',
           user_id: 'u01',
           kind: 'standard',
-          email: 'alice@example.com'
-        }
-      ]
+          email: 'alice@example.com',
+        },
+      ],
     },
 
     // Validate the refer/occur exists and is correct
@@ -71,9 +67,9 @@ export default {
           entry_id: '`create-alice:out.entry.id`',
           entry_kind: 'standard',
           kind: 'create',
-          email: 'alice@example.com'
-        }
-      ]
+          email: 'alice@example.com',
+        },
+      ],
     },
 
     // Validate email was 'sent' (uses mock entity)
@@ -84,9 +80,9 @@ export default {
           toaddr: 'alice@example.com',
           fromaddr: 'invite@example.com',
           kind: 'refer',
-          code: 'invite'
-        }
-      ]
+          code: 'invite',
+        },
+      ],
     },
 
     // Another user send a referral to alice@example.com
@@ -169,56 +165,76 @@ export default {
 
     // Accept the referral
     {
-      print: false,
+      print: true,
       name: 'accept-alice',
       pattern: 'accept:entry',
       params: {
         key: '`create-alice:out.entry.key`',
         user_id: 'u01',
-        kind: 'standard', // avoid using 'type', 'kind' has fewer conflicts
-        email: 'alice@example.com'
       },
       out: {
         ok: true,
         entry: {
           user_id: 'u01',
           kind: 'standard',
-          email: 'alice@example.com'
+          email: 'alice@example.com',
         },
         occur: [
           {
+            entry_kind: 'standard',
+            entry_id: '`create-alice:out.entry.id`',
+            email: 'alice@example.com',
             user_id: 'u01',
-            kind: 'accept'
-          }
-        ]
-      }
+            kind: 'accept',
+          },
+        ],
+      },
     },
     // Validate new refer/occur record
     {
-      print: false,
+      print: true,
       pattern: 'biz:null,role:entity,base:refer,name:occur,cmd:load',
       params: { q: { kind: 'accept' } },
       out: {
+        entry_kind: 'standard',
         entry_id: '`create-alice:out.entry.id`',
+        email: 'alice@example.com',
         user_id: 'u01',
-        kind: 'accept'
-      }
+        kind: 'accept',
+      },
     },
 
     // Validate new refer/reward updated
     {
-      print: false,
+      print: true,
       pattern: 'biz:null,role:entity,base:refer,name:reward,cmd:load',
-      params: { q: { entry_id: '`create-alice:out.entry.id`' } },
+      params: {
+        q: {
+          entry_id: '`create-alice:out.entry.id`',
+        },
+      },
       out: {
-        entry_id: '`accept-alice:out.entry.id`',
+        entry_id: '`create-alice:out.entry.id`',
         entry_kind: 'standard',
         kind: 'accept',
-        count: 1 // alice@example.com accepted
-      }
+        award: 'incr',
+        count: 1, // alice@example.com accepted
+      },
     },
 
-    { print: false, pattern: 'biz:null,role:mem-store,cmd:dump' },
+    // Check return for invalid entry key
+    {
+      print: true,
+      name: 'accept-alice',
+      pattern: 'accept:entry',
+      params: {
+        key: '123',
+      },
+      out: {
+        ok: false,
+        error: 'No entry found with this key',
+      },
+    },
 
     // Validate that the remaining invite changes is status to lost
 
@@ -247,7 +263,7 @@ export default {
         }
       ]
     }
-  ]
+  ],
 }
 
 /* ADDITIONAL SCENARIOS

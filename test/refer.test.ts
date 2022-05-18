@@ -64,9 +64,23 @@ async function makeBasicRules(seneca: any) {
         subject: '`config:sender.invite.subject`',
         toaddr: '`occur:sender.invite.subject`',
         code: 'invite',
-        kind: 'refer'
-      }
-    ]
+        kind: 'refer',
+      },
+    ],
+  })
+  await seneca.entity('refer/rule').save$({
+    ent: 'refer/occur',
+    cmd: 'save',
+    where: { kind: 'accept' },
+    call: [
+      {
+        kind: 'accept',
+        award: 'incr',
+        field: 'count',
+        give: 'award',
+        biz: 'refer',
+      },
+    ],
   })
 }
 
@@ -80,7 +94,7 @@ async function makeMockActions(seneca: any) {
         subject: msg.subject,
         kind: msg.kind,
         code: msg.code,
-        what: 'sent'
+        what: 'sent',
       })
     }
   )

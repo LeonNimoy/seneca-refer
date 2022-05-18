@@ -5,15 +5,11 @@
     "isolatedModules": true,
     "module": "commonjs",
     "noEmitOnError": true,
-    "outDir":"dist",
+    "outDir": "dist",
     "resolveJsonModule": true,
-    "rootDir":"src",
+    "rootDir": "src",
     "strict": true,
     "target": "ES2019"
   },
-  "exclude": [
-    "test",
-    "dist",
-    "node_modules"
-  ]
+  "exclude": ["test", "dist", "node_modules"]
 }

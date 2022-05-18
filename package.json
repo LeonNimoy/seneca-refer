@@ -16,7 +16,7 @@
     "url": "git://github.com/senecajs/seneca-refer.git"
   },
   "scripts": {
-    "format": "prettier --write .",
+    "prettier": "prettier --write .",
     "test": "jest --coverage",
     "test-some": "jest -t",
     "test-watch": "jest --coverage --watchAll",

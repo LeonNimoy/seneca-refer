@@ -4,7 +4,6 @@
 
     User referral business logic plugin for the Seneca platform.
 
-
 [![npm version](https://img.shields.io/npm/v/@seneca/refer.svg)](https://npmjs.com/package/@seneca/refer)
 [![build](https://github.com/senecajs/seneca-refer/actions/workflows/build.yml/badge.svg)](https://github.com/senecajs/seneca-refer/actions/workflows/build.yml)
 [![Coverage Status](https://coveralls.io/repos/github/senecajs/seneca-refer/badge.svg?branch=main)](https://coveralls.io/github/senecajs/seneca-refer?branch=main)
@@ -15,35 +14,27 @@
 | ![Voxgig](https://www.voxgig.com/res/img/vgt01r.png) | This open source module is sponsored and supported by [Voxgig](https://www.voxgig.com). |
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------- |
 
-
 ## Install
 
 ```sh
 $ npm install @seneca/refer
 ```
 
-
 ## Quick Example
 
 ```js
 // Setup - get the key value (<SECRET>) separately from a vault or
 // environment variable.
-Seneca()
-  .use('refer', {
-  })
+Seneca().use('refer', {})
 
 TODO
-
 ```
-
 
 <!--START:options-->
 
-
 ## Options
 
-*None.*
-
+_None._
 
 <!--END:options-->
 
@@ -51,9 +42,9 @@ TODO
 
 ## Action Patterns
 
-* [biz:refer,create:entry](#-bizrefercreateentry-)
-* [biz:refer,accept:entry](#-bizreferacceptentry-)
-* [biz:refer,load:rules](#-bizreferloadrules-)
+- [biz:refer,create:entry](#-bizrefercreateentry-)
+- [biz:refer,accept:entry](#-bizreferacceptentry-)
+- [biz:refer,load:rules](#-bizreferloadrules-)
 
 <!--END:action-list-->
 
@@ -65,25 +56,21 @@ TODO
 
 Create referral entry.
 
+---
 
-----------
+---
 
 ### &laquo; `biz:refer,accept:entry` &raquo;
 
 Accept referral entry.
 
-
-
-----------
+---
 
 ### &laquo; `biz:refer,load:rules` &raquo;
 
 No description provided.
 
-
-
-----------
-
+---
 
 <!--END:action-desc-->
 
@@ -105,16 +92,19 @@ Please, use the library along with the rules added to this project, following
 the code format pattern.
 
 ### Configuration Guide Examples:
+
 <details>
 <summary>VSCode</summary>
 
 Install the official [extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode).
 Then, add this to your settings:
+
 ```
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
 }
 ```
+
 If you prefer, add the following configuration to format your conde on save:
 
 ```
@@ -125,6 +115,7 @@ If you prefer, add the following configuration to format your conde on save:
 
 For more options see their
 [repository](https://github.com/prettier/prettier-vscode).
+
 </details>
 
 <details>
@@ -133,12 +124,13 @@ For more options see their
 Follow the official [documentation](https://www.jetbrains.com/help/webstorm/prettier.html),
 selecting the option:
 
-````
+```
 Tools -> Actions on Save -> Run Prettier.
 
-````
+```
 
 Also, certifies that the IDE is using the Prettier rules defined by this project.
+
 </details>
 
 <details>
@@ -148,10 +140,10 @@ Install prettier [package](https://github.com/jscheid/prettier.el) through
 [MELPA](https://melpa.org/#/prettier). Then add this hook, to your **.
 emacs** file, to format your changes on save:
 
-````
+```
 (add-hook 'after-init-hook #'global-prettier-mode)
 
-````
+```
 
 </details>
 
@@ -164,10 +156,12 @@ If you had any trouble configuring prettier - after you make your changes -
 run the following command to apply the code formatter:
 
 ```bash
-npm run format
+npm run prettier
 ```
+
 **Or**
 
 Feel free to
 [open an Issue](https://github.com/senecajs/seneca-refer/issues).
+
 ## Background

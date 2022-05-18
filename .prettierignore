@@ -1,13 +1,3 @@
 # Ignore artifacts:
 dist
 coverage
-CODE_OF_CONDUCT.md
-LICENSE
-NOTES.md
-README.md
-package.json
-package-lock.json
-tsconfig.json
-.github
-.prettierrc.json
-jest.config.js
